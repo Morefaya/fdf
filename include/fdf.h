@@ -12,12 +12,16 @@
 
 # define ESC 53
 
-# define BLUE 0x000000ff
+# define BLACK 0x0
+# define WHITE 0xFFFFFF
+# define BLUE 0x0000FF
+# define GREEN 0x00FF00
+# define RED 0xFF0000
 
 typedef struct	s_pos
 {
-	int	x;
-	int	y;
+	double	x;
+	double	y;
 }		t_pos;
 
 typedef struct	s_win
