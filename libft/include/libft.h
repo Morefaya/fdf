@@ -13,6 +13,7 @@
 #ifndef LIBFT_H
 # define LIBFT_H
 # include <string.h>
+# include "get_next_line.h"
 
 typedef struct		s_list
 {
@@ -90,5 +91,6 @@ int					ft_sqrt(int nb);
 void				ft_putstr_left(char *str, int width);
 void				ft_putstr_right(char *str, int width);
 void				ft_putendstr(char *str, char a);
-
+int				ft_getnbr(const char *str);
+int				ft_strisnum(const char *str);
 #endif
