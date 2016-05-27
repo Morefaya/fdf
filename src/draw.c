@@ -1,7 +1,7 @@
 #include "fdf.h"
 #include <stdlib.h>
 
-static void	trans_o(t_origin *my_o, t_screen next_pos)
+/*static void	trans_o(t_origin *my_o, t_screen next_pos)
 {
 	my_o->o.x = next_pos.x;
 	my_o->o.y = next_pos.y;
@@ -11,76 +11,99 @@ static void	trans_o(t_origin *my_o, t_screen next_pos)
 	my_o->j.y = my_o->o.y - UNIT_L;
 	my_o->k.x = my_o->o.x - UNIT_L * ANGLE_R;
 	my_o->k.y = my_o->o.y + UNIT_L * ANGLE_R;
-}
+}*/
 
-int	draw(t_win *win)
+static t_origin	*gt_origin(t_win * win)
 {
 	t_origin	*my_o;
-	t_screen	next;
-	void		*img_ptr;
 
 	if (!(my_o = (t_origin*)malloc(sizeof(*my_o))))
 	{
-		ft_putstr("error malloc");
+		ft_putstr("error malloc origin");
 		exit(1);
 	}
-	my_o->o.x = X_MAX / 4;
-	my_o->o.y = Y_MAX / 2;
+	my_o->o.x = win->s_x / 3;
+	my_o->o.y = win->s_y / 3;
 	my_o->i.x = my_o->o.x + UNIT_L;
 	my_o->i.y = my_o->o.y;
 	my_o->j.x = my_o->o.x;
 	my_o->j.y = my_o->o.y - UNIT_L;
 	my_o->k.x = my_o->o.x - UNIT_L * ANGLE_R;
 	my_o->k.y = my_o->o.y + UNIT_L * ANGLE_R;
+	return (my_o);
+}
 
-	next.x = 1000;
-	next.y = 300;
+static void	draw_point(t_win *win, t_origin *my_o)
+{
+	int		i;
+	int		j;
+	t_pos		cod;
+	t_screen	p;
 
-	draw_trandmark(win, my_o);
-	img_ptr = mlx_new_image(win->mlx_ptr, X_MAX , Y_MAX);
+	i = 0;
+	while (i < win->nb_line)
+	{
+		j = 0;
+		while (j < win->nb_col)
+		{
+			cod.x = j;
+			cod.z = i;
+			cod.y = win->tab[i][j];
+			get_pixel(cod, my_o, &p);
+			mlx_pixel_put(win->mlx_ptr, win->win_ptr, p.x, p.y, YELLOW);
+			j++;
+		}
+		i++;
+	}
+}
 
-	del_trandmark(win, my_o);
-	trans_o(my_o, next);
-	draw_trandmark(win, my_o);
+static void	next_fdf(t_win *win, t_pos pos, t_origin *my_o)
+{	
+	t_screen	o;
+	t_screen	left;
+	t_screen	down;
 
-	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, img_ptr, X_MAX, Y_MAX);
-	/*t_screen	o;
-	t_pos		c;
+	get_pixel(pos, my_o, &o);
+	pos.x++;
+	pos.y = win->tab[(int)pos.z][(int)pos.x];
+	get_pixel(pos, my_o, &left);
+	draw_line(win, o, left);
+	pos.x--;
+	pos.z++;
+	pos.y = win->tab[(int)pos.z][(int)pos.x];
+	get_pixel(pos, my_o, &down);
+	draw_line(win, o, down);
+}
 
-	c.x = 1;
-	c.y = 1;
-	c.z = 1;
-	get_pixel(c, my_o, &o);
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, o.x, o.y, YELLOW);
-	c.x = 0;
-	c.y = 1;
-	c.z = 0;
-	get_pixel(c, my_o, &o);
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, o.x, o.y, YELLOW);
-	c.x = 1;
-	c.y = 0;
-	c.z = 0;
-	get_pixel(c, my_o, &o);
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, o.x, o.y, YELLOW);
-	c.x = 0;
-	c.y = 0;
-	c.z = 1;
-	get_pixel(c, my_o, &o);
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, o.x, o.y, YELLOW);
-	c.x = 1;
-	c.y = 1;
-	c.z = 0;
-	get_pixel(c, my_o, &o);
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, o.x, o.y, YELLOW);
-	c.x = 1;
-	c.y = 0;
-	c.z = 1;
-	get_pixel(c, my_o, &o);
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, o.x, o.y, YELLOW);
-	c.x = 0;
-	c.y = 1;
-	c.z = 1;
-	get_pixel(c, my_o, &o);
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, o.x, o.y, YELLOW);*/
+static void	draw_fdf(t_win *win, t_origin *my_o)
+{
+	int		i;
+	int		j;
+	t_pos		pos;
+
+	i = 0;
+	while (i < win->nb_line - 1)
+	{
+		j = 0;
+		while (j < win->nb_col - 1)
+		{
+			pos.x = j;
+			pos.z = i;
+			pos.y = win->tab[i][j];
+			next_fdf(win, pos, my_o);
+			j++;
+		}
+		i++;
+	}
+}
+
+int	draw(t_win *win)
+{
+	t_origin	*my_o;
+
+	my_o = gt_origin(win);
+	draw_point(win, my_o);
+	draw_fdf(win, my_o);
+	free(my_o);
 	return (0);
 }

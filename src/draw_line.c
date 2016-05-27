@@ -5,18 +5,33 @@ static double	put_line(t_win *win, t_screen a, t_screen b)
 	t_pos	i;
 	double	d;
 	double	e;
+	double	aux;
 
+	
 	d = (a.y - b.y) / (a.x - b.x);
 	e = a.y - d * a.x;
 	i.x = (a.x < b.x) ? a.x : b.x;
+	aux = d * i.x + e;
 	while (i.x < ((a.x < b.x) ? b.x : a.x))
 	{
 		i.y = d * i.x + e;
+		if (aux < i.y)
+			while (aux < i.y)
+			{
+				mlx_pixel_put(win->mlx_ptr, win->win_ptr, i.x, aux, BLUE);
+				aux++;
+			}
+		else
+			while (aux > i.y)
+			{
+				mlx_pixel_put(win->mlx_ptr, win->win_ptr, i.x, aux, BLUE);
+				aux--;
+			}
 		mlx_pixel_put(win->mlx_ptr, win->win_ptr, i.x, i.y, BLUE);
 		i.x++;
 	}
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, a.x, a.y, RED);
-	mlx_pixel_put(win->mlx_ptr, win->win_ptr, b.x, b.y, GREEN);
+	//mlx_pixel_put(win->mlx_ptr, win->win_ptr, a.x, a.y, RED);
+	//mlx_pixel_put(win->mlx_ptr, win->win_ptr, b.x, b.y, GREEN);
 	return (d);
 }
 
