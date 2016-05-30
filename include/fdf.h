@@ -47,6 +47,12 @@ typedef struct		s_origin
 	t_screen	k;
 }			t_origin;
 
+typedef struct		s_vect
+{
+	t_screen	sta;
+	t_screen	sto;
+}			t_vect;
+
 typedef struct		s_win
 {
 	void		*mlx_ptr;

@@ -26,11 +26,7 @@ static void	gt_screen_size(const char *file, int **tab, t_screen *screen_size)
 		i++;
 	}
 	screen_size->x = X_MAX + nb_col * 10 + (max - min) * 4;
-//(nb_col > (X_MAX / 50)) ?
-//		(X_MAX + nb_col * 10) : X_MAX;
 	screen_size->y = Y_MAX + nb_line * 5 + (max - min) * 2;
-//((max - min) * 50 > (Y_MAX / 50)) ?
-//		(Y_MAX + (max - min) * 10) : Y_MAX;
 	ft_putnbr(nb_col);
 	ft_putchar('\t');
 	ft_putnbr(nb_line);

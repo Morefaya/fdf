@@ -33,7 +33,7 @@ static t_origin	*gt_origin(t_win * win)
 	return (my_o);
 }
 
-static void	draw_point(t_win *win, t_origin *my_o)
+/*static void	draw_point(t_win *win, t_origin *my_o)
 {
 	int		i;
 	int		j;
@@ -55,7 +55,7 @@ static void	draw_point(t_win *win, t_origin *my_o)
 		}
 		i++;
 	}
-}
+}*/
 
 static void	next_fdf(t_win *win, t_pos pos, t_origin *my_o)
 {	
@@ -102,7 +102,7 @@ int	draw(t_win *win)
 	t_origin	*my_o;
 
 	my_o = gt_origin(win);
-	draw_point(win, my_o);
+//	draw_point(win, my_o);
 	draw_fdf(win, my_o);
 	free(my_o);
 	return (0);
